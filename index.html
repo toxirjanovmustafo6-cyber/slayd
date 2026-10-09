@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="uz" class="dark">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Kompyuter Texnologiyalari Tarixi va Rivojlanishi</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://unpkg.com/lucide@latest"></script>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+		rel="stylesheet">
+	<script>
+		tailwind.config = {
+			darkMode: 'class',
+			theme: {
+				extend: {
+					fontFamily: {
+						// Manrope — kirill (rus) harflari uchun zaxira shrift
+						sans: ['Plus Jakarta Sans', 'Manrope', 'sans-serif'],
+						heading: ['Space Grotesk', 'Manrope', 'sans-serif'],
+					},
+					colors: {
+						brand: {
+							50: '#f0f9ff',
+							500: '#06b6d4',
+							600: '#0284c7',
+							900: '#0f172a',
+						}
+					}
+				}
+			}
+		}
+	</script>
+	<style>
+		:root {
+			--dot: rgba(255, 255, 255, 0.2);
+			--dot-hover: rgba(255, 255, 255, 0.4);
+			--lang-idle: #94a3b8;
+		}
+
+		body {
+			font-family: 'Plus Jakarta Sans', 'Manrope', sans-serif;
+			background-color: #090d16;
+			color: #f8fafc;
+			overflow: hidden;
+			user-select: none;
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+
+		.font-heading {
+			font-family: 'Space Grotesk', 'Manrope', sans-serif;
+		}
+
+		.glass-card {
+			background: rgba(15, 23, 42, 0.75);
+			backdrop-filter: blur(16px);
+			-webkit-backdrop-filter: blur(16px);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+		}
+
+		.glass-nav {
+			background: rgba(15, 23, 42, 0.85);
+			backdrop-filter: blur(20px);
+			-webkit-backdrop-filter: blur(20px);
+			border-top: 1px solid rgba(255, 255, 255, 0.1);
+		}
+
+		.slide {
+			position: absolute;
+			inset: 0;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+			transform: scale(0.96) translateY(20px);
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			padding: 2rem 1.5rem 5rem 1.5rem;
+		}
+
+		@media (min-width: 768px) {
+			.slide {
+				padding: 3rem 4rem 6rem 4rem;
+			}
+		}
+
+		.slide.active {
+			opacity: 1;
+			pointer-events: auto;
+			transform: scale(1) translateY(0);
+		}
+
+		.slide.active .animate-item {
+			animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+		}
+
+		@keyframes slideUpFade {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.custom-scroll::-webkit-scrollbar {
+			width: 6px;
+		}
+
+		.custom-scroll::-webkit-scrollbar-track {
+			background: rgba(255, 255, 255, 0.05);
+			border-radius: 8px;
+		}
+
+		.custom-scroll::-webkit-scrollbar-thumb {
+			background: rgba(255, 255, 255, 0.2);
+			border-radius: 8px;
+		}
+
+		.glow-blob {
+			position: absolute;
+			border-radius: 50%;
+			filter: blur(100px);
+			opacity: 0.25;
+			pointer-events: none;
+			z-index: 0;
+			transition: opacity 0.3s ease;
+		}
+
+		/* ---------- Progress dots ---------- */
+		.dot {
+			height: 0.625rem;
+			width: 0.625rem;
+			border-radius: 9999px;
+			background: var(--dot);
+			transition: all 0.3s ease;
+		}
+
+		.dot:hover {
+			background: var(--dot-hover);
+		}
+
+		.dot.dot-on {
+			width: 2rem;
+			background: #22d3ee;
+		}
+
+		/* ---------- Language switcher ---------- */
+		.lang-btn {
+			padding: 0.375rem 0.625rem;
+			border-radius: 0.5rem;
+			font-size: 0.75rem;
+			font-weight: 700;
+			letter-spacing: 0.04em;
+			color: var(--lang-idle);
+			transition: all 0.2s ease;
+		}
+
+		.lang-btn:hover {
+			color: #0891b2;
+		}
+
+		.lang-btn.active {
+			background: linear-gradient(to right, #06b6d4, #2563eb);
+			color: #fff !important;
+			box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+		}
+
+		/* ---------- Diagram (SVG) ---------- */
+		.ch-text {
+			fill: #94a3b8;
+			font-size: 11px;
+		}
+
+		.ch-label {
+			fill: #e2e8f0;
+			font-size: 11px;
+			font-weight: 600;
+		}
+
+		.ch-grid {
+			stroke: rgba(255, 255, 255, 0.08);
+			stroke-width: 1;
+		}
+
+		.ch-dot {
+			stroke: #0f172a;
+			stroke-width: 2;
+			fill: #06b6d4;
+		}
+
+		html:not(.dark) .ch-text {
+			fill: #475569;
+		}
+
+		html:not(.dark) .ch-label {
+			fill: #0f172a;
+		}
+
+		html:not(.dark) .ch-grid {
+			stroke: rgba(15, 23, 42, 0.1);
+		}
+
+		html:not(.dark) .ch-dot {
+			stroke: #ffffff;
+		}
+
+		.ch-line {
+			stroke-dasharray: 1;
+			stroke-dashoffset: 1;
+		}
+
+		.ch-area,
+		.ch-pt {
+			opacity: 0;
+		}
+
+		.slide.active .ch-line {
+			animation: drawLine 2s 0.4s ease forwards;
+		}
+
+		.slide.active .ch-area {
+			animation: fadeIn 1s 1.4s ease forwards;
+		}
+
+		.slide.active .ch-pt {
+			animation: fadeIn 0.4s ease forwards;
+		}
+
+		@keyframes drawLine {
+			to {
+				stroke-dashoffset: 0;
+			}
+		}
+
+		@keyframes fadeIn {
+			to {
+				opacity: 1;
+			}
+		}
+
+		/* ---------- PowerPoint-style diagrams ---------- */
+		.chev {
+			height: 3.5rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 0.75rem;
+			padding: 0 1rem;
+			text-align: center;
+			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+		}
+
+		@media (min-width: 768px) {
+			.chev {
+				border-radius: 0;
+				padding: 0 1.25rem 0 2rem;
+				clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%, 20px 50%);
+				box-shadow: none;
+			}
+
+			.chev.chev-first {
+				padding-left: 1rem;
+				clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%);
+			}
+
+			.chev.chev-wide {
+				width: calc(100% + 16px);
+			}
+		}
+
+		.scroll-inner {
+			max-height: 100%;
+			overflow-y: auto;
+		}
+
+		/* ---------- Theme toggle icons ---------- */
+		html.dark .theme-moon {
+			display: none;
+		}
+
+		html:not(.dark) .theme-sun {
+			display: none;
+		}
+
+		/* =====================================================
+		   LIGHT MODE (kunduzgi rejim)
+		   ===================================================== */
+		html:not(.dark) {
+			--dot: rgba(15, 23, 42, 0.18);
+			--dot-hover: rgba(15, 23, 42, 0.35);
+			--lang-idle: #475569;
+		}
+
+		html:not(.dark) body {
+			background-color: #eef2f7 !important;
+			color: #0f172a !important;
+		}
+
+		html:not(.dark) .glass-card {
+			background: rgba(255, 255, 255, 0.85);
+			border: 1px solid rgba(15, 23, 42, 0.08);
+			box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+		}
+
+		html:not(.dark) .glass-nav {
+			background: rgba(255, 255, 255, 0.88);
+			border-top: 1px solid rgba(15, 23, 42, 0.08);
+		}
+
+		html:not(.dark) .app-header {
+			background: rgba(255, 255, 255, 0.65) !important;
+			border-color: rgba(15, 23, 42, 0.08) !important;
+		}
+
+		html:not(.dark) .glow-blob {
+			opacity: 0.16;
+		}
+
+		/* text */
+		html:not(.dark) .text-white:not(.keep-white) {
+			color: #0f172a;
+		}
+
+		html:not(.dark) .text-slate-100,
+		html:not(.dark) .text-slate-200,
+		html:not(.dark) .text-slate-300 {
+			color: #334155;
+		}
+
+		html:not(.dark) .text-slate-400 {
+			color: #475569;
+		}
+
+		html:not(.dark) .text-slate-500 {
+			color: #64748b;
+		}
+
+		html:not(.dark) .text-cyan-200,
+		html:not(.dark) .text-cyan-300 {
+			color: #0e7490;
+		}
+
+		html:not(.dark) .text-cyan-400 {
+			color: #0891b2;
+		}
+
+		html:not(.dark) .text-indigo-400 {
+			color: #4f46e5;
+		}
+
+		html:not(.dark) .text-purple-400 {
+			color: #9333ea;
+		}
+
+		html:not(.dark) .text-emerald-400 {
+			color: #059669;
+		}
+
+		html:not(.dark) .text-amber-400 {
+			color: #d97706;
+		}
+
+		html:not(.dark) .text-blue-400 {
+			color: #2563eb;
+		}
+
+		html:not(.dark) .text-pink-400 {
+			color: #db2777;
+		}
+
+		/* gradient headings */
+		html:not(.dark) .title-grad {
+			background-image: linear-gradient(to right, #0f172a, #0e7490, #4338ca) !important;
+		}
+
+		html:not(.dark) .quote-card {
+			background-image: linear-gradient(to right, #ecfeff, #ffffff, #eef2ff) !important;
+		}
+
+		/* translucent white surfaces -> translucent ink */
+		html:not(.dark) .bg-white\/5 {
+			background-color: rgba(15, 23, 42, 0.05);
+		}
+
+		html:not(.dark) .bg-white\/10 {
+			background-color: rgba(15, 23, 42, 0.07);
+		}
+
+		html:not(.dark) .hover\:bg-white\/10:hover {
+			background-color: rgba(15, 23, 42, 0.1);
+		}
+
+		html:not(.dark) .hover\:bg-white\/20:hover {
+			background-color: rgba(15, 23, 42, 0.14);
+		}
+
+		html:not(.dark) .border-white\/5 {
+			border-color: rgba(15, 23, 42, 0.07);
+		}
+
+		html:not(.dark) .border-white\/10 {
+			border-color: rgba(15, 23, 42, 0.12);
+		}
+
+		html:not(.dark) .hover\:text-white:hover {
+			color: #0f172a;
+		}
+
+		html:not(.dark) .custom-scroll::-webkit-scrollbar-thumb {
+			background: rgba(15, 23, 42, 0.25);
+		}
+	</style>
+</head>
+
+<body class="h-screen w-screen overflow-hidden flex flex-col justify-between relative bg-slate-950 text-slate-100">
+
+	<div class="glow-blob w-[500px] h-[500px] bg-cyan-500 -top-20 -left-20"></div>
+	<div class="glow-blob w-[600px] h-[600px] bg-indigo-600 -bottom-30 -right-20"></div>
+	<div class="glow-blob w-[400px] h-[400px] bg-purple-600 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+
+	<header
+		class="app-header relative z-20 w-full px-4 sm:px-6 py-4 flex justify-between items-center bg-slate-950/40 backdrop-blur-md border-b border-white/5">
+		<div class="flex items-center gap-3">
+			<div
+				class="keep-white p-2 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20">
+				<i data-lucide="cpu" class="w-5 h-5"></i>
+			</div>
+			<span
+				class="title-grad hidden sm:inline font-heading font-bold text-lg tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400"
+				data-i18n="brand">
+			</span>
+		</div>
+
+		<div class="flex items-center gap-2 sm:gap-4">
+			<!-- Til tanlash -->
+			<div id="lang-switch" class="flex items-center gap-1 p-1 rounded-xl bg-white/5 border border-white/10">
+				<button class="lang-btn" data-lang="uz" title="O'zbekcha">UZ</button>
+				<button class="lang-btn" data-lang="en" title="English">EN</button>
+				<button class="lang-btn" data-lang="ru" title="Русский">RU</button>
+				<button class="lang-btn" data-lang="tr" title="Türkçe">TR</button>
+			</div>
+
+			<!-- Kun / Tun rejimi -->
+			<button id="theme-btn"
+				class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition border border-white/10"
+				data-i18n-title="themeTip">
+				<span class="theme-sun"><i data-lucide="sun" class="w-4 h-4"></i></span>
+				<span class="theme-moon"><i data-lucide="moon" class="w-4 h-4"></i></span>
+			</button>
+
+			<button id="fullscreen-btn"
+				class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition border border-white/10"
+				data-i18n-title="fsTip">
+				<i data-lucide="maximize" class="w-4 h-4"></i>
+			</button>
+		</div>
+
+		<div
+			class="absolute bottom-0 left-0 h-[3px] bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-500 transition-all duration-300"
+			id="progress-bar" style="width: 0%;"></div>
+	</header>
+
+	<main class="relative z-10 flex-grow w-full max-w-7xl mx-auto flex items-center justify-center">
+
+		<!-- SLIDE 0 -->
+		<section class="slide active" id="slide-0">
+			<div class="text-center max-w-3xl mx-auto space-y-6">
+				<div
+					class="animate-item inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-medium text-sm mb-2"
+					style="animation-delay: 0.1s;">
+					<i data-lucide="sparkles" class="w-4 h-4"></i>
+					<span data-i18n="badge"></span>
+				</div>
+
+				<h1
+					class="title-grad animate-item font-heading font-extrabold text-4xl sm:text-6xl md:text-7xl leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400"
+					style="animation-delay: 0.2s;" data-i18n="title">
+				</h1>
+
+				<p class="animate-item text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed"
+					style="animation-delay: 0.3s;" data-i18n="subtitle">
+				</p>
+
+				<div class="animate-item pt-6 flex flex-col sm:flex-row items-center justify-center gap-4"
+					style="animation-delay: 0.4s;">
+					<button id="start-btn"
+						class="keep-white w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold shadow-lg shadow-cyan-500/25 transition transform active:scale-95 flex items-center justify-center gap-3">
+						<span data-i18n="start"></span>
+						<i data-lucide="arrow-right" class="w-5 h-5"></i>
+					</button>
+				</div>
+
+				<div class="animate-item pt-10 flex items-center justify-center gap-6 text-slate-500 text-xs sm:text-sm"
+					style="animation-delay: 0.5s;">
+					<span class="flex items-center gap-2"><kbd
+							class="px-2 py-1 bg-white/10 rounded text-slate-300 font-mono">←</kbd> <kbd
+							class="px-2 py-1 bg-white/10 rounded text-slate-300 font-mono">→</kbd> <span
+							data-i18n="kbdNav"></span></span>
+					<span class="flex items-center gap-2"><kbd
+							class="px-2 py-1 bg-white/10 rounded text-slate-300 font-mono">Space</kbd> <span
+							data-i18n="kbdNext"></span></span>
+				</div>
+			</div>
+		</section>
+
+		<!-- SLIDE 1 -->
+		<section class="slide" id="slide-1">
+			<div class="w-full max-w-5xl mx-auto space-y-6">
+				<div class="animate-item text-center sm:text-left space-y-2" style="animation-delay: 0.1s;">
+					<span class="text-cyan-400 text-sm font-semibold tracking-wider uppercase" data-i18n="st1"></span>
+					<h2 class="font-heading text-3xl sm:text-4xl font-bold" data-i18n="s1t"></h2>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+
+					<div
+						class="animate-item glass-card p-6 rounded-2xl border border-white/10 hover:border-cyan-500/40 transition duration-300 flex flex-col justify-between"
+						style="animation-delay: 0.2s;">
+						<div>
+							<div
+								class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-4">
+								<i data-lucide="calculator" class="w-6 h-6"></i>
+							</div>
+							<h3 class="font-heading text-xl font-bold text-white mb-2" data-i18n="abName"></h3>
+							<p class="text-slate-400 text-sm leading-relaxed" data-i18n="abDesc"></p>
+						</div>
+						<div class="mt-6 pt-4 border-t border-white/5 text-xs text-cyan-400 font-medium" data-i18n="abDate">
+						</div>
+					</div>
+
+					<div
+						class="animate-item glass-card p-6 rounded-2xl border border-white/10 hover:border-cyan-500/40 transition duration-300 flex flex-col justify-between"
+						style="animation-delay: 0.3s;">
+						<div>
+							<div
+								class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4">
+								<i data-lucide="cog" class="w-6 h-6"></i>
+							</div>
+							<h3 class="font-heading text-xl font-bold text-white mb-2" data-i18n="bbName"></h3>
+							<p class="text-slate-400 text-sm leading-relaxed" data-i18n="bbDesc"></p>
+						</div>
+						<div class="mt-6 pt-4 border-t border-white/5 text-xs text-indigo-400 font-medium" data-i18n="bbDate"></div>
+					</div>
+
+					<div
+						class="animate-item glass-card p-6 rounded-2xl border border-white/10 hover:border-cyan-500/40 transition duration-300 flex flex-col justify-between"
+						style="animation-delay: 0.4s;">
+						<div>
+							<div
+								class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4">
+								<i data-lucide="code-2" class="w-6 h-6"></i>
+							</div>
+							<h3 class="font-heading text-xl font-bold text-white mb-2" data-i18n="adName"></h3>
+							<p class="text-slate-400 text-sm leading-relaxed" data-i18n="adDesc"></p>
+						</div>
+						<div class="mt-6 pt-4 border-t border-white/5 text-xs text-purple-400 font-medium" data-i18n="adDate">
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- SLIDE 2 -->
+		<section class="slide" id="slide-2">
+			<div class="w-full max-w-5xl mx-auto space-y-6">
+				<div class="animate-item text-center sm:text-left space-y-2" style="animation-delay: 0.1s;">
+					<span class="text-cyan-400 text-sm font-semibold tracking-wider uppercase" data-i18n="st2"></span>
+					<h2 class="font-heading text-3xl sm:text-4xl font-bold" data-i18n="s2t"></h2>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-2">
+					<div class="animate-item glass-card p-6 sm:p-8 rounded-2xl space-y-4" style="animation-delay: 0.2s;">
+						<div class="inline-flex p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
+							<i data-lucide="zap" class="w-6 h-6"></i>
+						</div>
+						<h3 class="font-heading text-2xl font-bold text-white" data-i18n="vtName"></h3>
+						<p class="text-slate-300 text-sm leading-relaxed" data-i18n="vtDesc"></p>
+						<ul class="space-y-2 text-sm text-slate-400">
+							<li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-cyan-400"></i>
+								<span data-i18n="vt1"></span>
+							</li>
+							<li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-cyan-400"></i>
+								<span data-i18n="vt2"></span>
+							</li>
+							<li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-cyan-400"></i>
+								<span data-i18n="vt3"></span>
+							</li>
+						</ul>
+					</div>
+
+					<div class="animate-item glass-card p-6 sm:p-8 rounded-2xl space-y-6 border-l-4 border-l-cyan-500"
+						style="animation-delay: 0.3s;">
+						<h3 class="font-heading text-2xl font-bold text-white flex items-center justify-between">
+							<span>ENIAC (1946)</span>
+							<span class="text-xs px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 font-mono">150 kW</span>
+						</h3>
+						<div class="grid grid-cols-2 gap-4">
+							<div class="p-4 rounded-xl bg-white/5 border border-white/5 text-center">
+								<div class="text-3xl font-extrabold font-heading text-cyan-400" data-i18n="enW"></div>
+								<div class="text-xs text-slate-400 mt-1" data-i18n="enWl"></div>
+							</div>
+							<div class="p-4 rounded-xl bg-white/5 border border-white/5 text-center">
+								<div class="text-3xl font-extrabold font-heading text-indigo-400">18,000+</div>
+								<div class="text-xs text-slate-400 mt-1" data-i18n="enTl"></div>
+							</div>
+							<div class="p-4 rounded-xl bg-white/5 border border-white/5 text-center">
+								<div class="text-3xl font-extrabold font-heading text-purple-400" data-i18n="enA"></div>
+								<div class="text-xs text-slate-400 mt-1" data-i18n="enAl"></div>
+							</div>
+							<div class="p-4 rounded-xl bg-white/5 border border-white/5 text-center">
+								<div class="text-3xl font-extrabold font-heading text-emerald-400">5,000</div>
+								<div class="text-xs text-slate-400 mt-1" data-i18n="enOl"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- SLIDE 3 -->
+		<section class="slide" id="slide-3">
+			<div class="w-full max-w-5xl mx-auto space-y-6">
+				<div class="animate-item text-center sm:text-left space-y-2" style="animation-delay: 0.1s;">
+					<span class="text-cyan-400 text-sm font-semibold tracking-wider uppercase" data-i18n="st3"></span>
+					<h2 class="font-heading text-3xl sm:text-4xl font-bold" data-i18n="s3t"></h2>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+					<div class="animate-item glass-card p-6 rounded-2xl space-y-4" style="animation-delay: 0.2s;">
+						<div class="flex items-center gap-3">
+							<div class="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
+								<i data-lucide="microchip" class="w-6 h-6"></i>
+							</div>
+							<div>
+								<h3 class="font-heading text-xl font-bold text-white" data-i18n="g2Name"></h3>
+								<span class="text-xs text-slate-400" data-i18n="g2Date"></span>
+							</div>
+						</div>
+						<p class="text-slate-300 text-sm leading-relaxed" data-i18n="g2Desc"></p>
+					</div>
+
+					<div class="animate-item glass-card p-6 rounded-2xl space-y-4" style="animation-delay: 0.3s;">
+						<div class="flex items-center gap-3">
+							<div class="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400">
+								<i data-lucide="layers" class="w-6 h-6"></i>
+							</div>
+							<div>
+								<h3 class="font-heading text-xl font-bold text-white" data-i18n="g3Name"></h3>
+								<span class="text-xs text-slate-400" data-i18n="g3Date"></span>
+							</div>
+						</div>
+						<p class="text-slate-300 text-sm leading-relaxed" data-i18n="g3Desc"></p>
+					</div>
+				</div>
+
+				<div class="animate-item glass-card p-6 rounded-2xl border-t-2 border-t-cyan-500"
+					style="animation-delay: 0.4s;">
+					<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+						<div class="space-y-1 text-center sm:text-left">
+							<h4 class="font-heading font-bold text-lg text-cyan-400" data-i18n="mooreT"></h4>
+							<p class="text-slate-300 text-sm" data-i18n="mooreQ"></p>
+						</div>
+						<div
+							class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-mono text-slate-400 whitespace-nowrap"
+							data-i18n="mooreTag">
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- SLIDE DIAGRAM -->
+		<section class="slide" id="slide-diagram">
+			<div class="w-full max-w-5xl mx-auto space-y-5">
+				<div class="animate-item text-center sm:text-left space-y-2" style="animation-delay: 0.1s;">
+					<span class="text-cyan-400 text-sm font-semibold tracking-wider uppercase" data-i18n="stD"></span>
+					<h2 class="font-heading text-3xl sm:text-4xl font-bold" data-i18n="chT"></h2>
+				</div>
+
+				<div class="animate-item glass-card p-4 sm:p-6 rounded-2xl space-y-3" style="animation-delay: 0.2s;">
+					<div class="flex items-center gap-2 text-xs sm:text-sm text-slate-400">
+						<i data-lucide="trending-up" class="w-4 h-4 text-cyan-400"></i>
+						<span data-i18n="chY"></span>
+					</div>
+					<svg viewBox="0 0 760 345" class="w-full h-auto max-h-[42vh] mx-auto" role="img"
+						aria-label="Transistor count 1971-2023">
+						<defs>
+							<linearGradient id="chFill" x1="0" y1="0" x2="0" y2="1">
+								<stop offset="0" stop-color="#06b6d4" stop-opacity="0.35" />
+								<stop offset="1" stop-color="#06b6d4" stop-opacity="0" />
+							</linearGradient>
+						</defs>
+						<line class="ch-grid" x1="70" x2="730" y1="310.0" y2="310.0" /><text class="ch-text" x="62" y="314.0"
+							text-anchor="end">10³</text>
+						<line class="ch-grid" x1="70" x2="730" y1="277.8" y2="277.8" /><text class="ch-text" x="62" y="281.8"
+							text-anchor="end">10⁴</text>
+						<line class="ch-grid" x1="70" x2="730" y1="245.6" y2="245.6" /><text class="ch-text" x="62" y="249.6"
+							text-anchor="end">10⁵</text>
+						<line class="ch-grid" x1="70" x2="730" y1="213.3" y2="213.3" /><text class="ch-text" x="62" y="217.3"
+							text-anchor="end">10⁶</text>
+						<line class="ch-grid" x1="70" x2="730" y1="181.1" y2="181.1" /><text class="ch-text" x="62" y="185.1"
+							text-anchor="end">10⁷</text>
+						<line class="ch-grid" x1="70" x2="730" y1="148.9" y2="148.9" /><text class="ch-text" x="62" y="152.9"
+							text-anchor="end">10⁸</text>
+						<line class="ch-grid" x1="70" x2="730" y1="116.7" y2="116.7" /><text class="ch-text" x="62" y="120.7"
+							text-anchor="end">10⁹</text>
+						<line class="ch-grid" x1="70" x2="730" y1="84.4" y2="84.4" /><text class="ch-text" x="62" y="88.4"
+							text-anchor="end">10¹⁰</text>
+						<line class="ch-grid" x1="70" x2="730" y1="52.2" y2="52.2" /><text class="ch-text" x="62" y="56.2"
+							text-anchor="end">10¹¹</text>
+						<line class="ch-grid" x1="70" x2="730" y1="20.0" y2="20.0" /><text class="ch-text" x="62" y="24.0"
+							text-anchor="end">10¹²</text>
+						<line class="ch-grid" x1="70" x2="70" y1="20" y2="310" /><text class="ch-text" x="70" y="332"
+							text-anchor="middle">1970</text>
+						<line class="ch-grid" x1="190" x2="190" y1="20" y2="310" /><text class="ch-text" x="190" y="332"
+							text-anchor="middle">1980</text>
+						<line class="ch-grid" x1="310" x2="310" y1="20" y2="310" /><text class="ch-text" x="310" y="332"
+							text-anchor="middle">1990</text>
+						<line class="ch-grid" x1="430" x2="430" y1="20" y2="310" /><text class="ch-text" x="430" y="332"
+							text-anchor="middle">2000</text>
+						<line class="ch-grid" x1="550" x2="550" y1="20" y2="310" /><text class="ch-text" x="550" y="332"
+							text-anchor="middle">2010</text>
+						<line class="ch-grid" x1="670" x2="670" y1="20" y2="310" /><text class="ch-text" x="670" y="332"
+							text-anchor="middle">2020</text>
+						<path class="ch-area"
+							d="M82,298.3 L166,262.9 L250,231.4 L346,197.5 L430,161.0 L502,134.0 L574,112.0 L670,77.9 L706,48.1 L706,310 L82,310 Z"
+							fill="url(#chFill)" />
+						<path class="ch-line" pathLength="1"
+							d="M82,298.3 L166,262.9 L250,231.4 L346,197.5 L430,161.0 L502,134.0 L574,112.0 L670,77.9 L706,48.1"
+							fill="none" stroke="#06b6d4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+						<g class="ch-pt" style="animation-delay:0.6s">
+							<circle class="ch-dot" cx="82" cy="298.3" r="5" /><text class="ch-label" x="88" y="316.3">4004
+								(1971)</text>
+						</g>
+						<g class="ch-pt" style="animation-delay:0.8s">
+							<circle class="ch-dot" cx="166" cy="262.9" r="5" /><text class="ch-label" x="172" y="280.9">8086
+								(1978)</text>
+						</g>
+						<g class="ch-pt" style="animation-delay:1.0s">
+							<circle class="ch-dot" cx="250" cy="231.4" r="5" /><text class="ch-label" x="256" y="249.4">386
+								(1985)</text>
+						</g>
+						<g class="ch-pt" style="animation-delay:1.2s">
+							<circle class="ch-dot" cx="346" cy="197.5" r="5" /><text class="ch-label" x="352" y="215.5">Pentium
+								(1993)</text>
+						</g>
+						<g class="ch-pt" style="animation-delay:1.4s">
+							<circle class="ch-dot" cx="430" cy="161.0" r="5" /><text class="ch-label" x="436" y="179.0">Pentium 4
+								(2000)</text>
+						</g>
+						<g class="ch-pt" style="animation-delay:1.6s">
+							<circle class="ch-dot" cx="502" cy="134.0" r="5" /><text class="ch-label" x="508" y="152.0">Core 2
+								(2006)</text>
+						</g>
+						<g class="ch-pt" style="animation-delay:1.8s">
+							<circle class="ch-dot" cx="574" cy="112.0" r="5" /><text class="ch-label" x="580" y="130.0">Core i7
+								(2012)</text>
+						</g>
+						<g class="ch-pt" style="animation-delay:2.0s">
+							<circle class="ch-dot" cx="670" cy="77.9" r="5" /><text class="ch-label" x="676" y="95.9">M1 (2020)</text>
+						</g>
+						<g class="ch-pt" style="animation-delay:2.2s">
+							<circle class="ch-dot" cx="706" cy="48.1" r="5" /><text class="ch-label" x="712" y="36.1"
+								text-anchor="end">M2 Ultra (2023)</text>
+						</g>
+					</svg>
+					<p class="text-xs sm:text-sm text-slate-400 leading-relaxed" data-i18n="chNote"></p>
+				</div>
+			</div>
+		</section>
+
+		<!-- SLIDE PROCESS -->
+		<section class="slide" id="slide-process">
+			<div class="scroll-inner custom-scroll w-full max-w-6xl mx-auto space-y-6">
+				<div class="animate-item text-center sm:text-left space-y-2" style="animation-delay: 0.1s;">
+					<span class="text-cyan-400 text-sm font-semibold tracking-wider uppercase" data-i18n="stD"></span>
+					<h2 class="font-heading text-3xl sm:text-4xl font-bold" data-i18n="pT"></h2>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-4 pt-2">
+					<div class="animate-item" style="animation-delay: 0.2s;">
+						<div class="chev chev-first chev-wide keep-white text-white font-heading font-bold text-sm sm:text-base"
+							style="background: #06b6d4;">1940–50</div>
+						<div class="glass-card rounded-xl p-4 mt-3 space-y-1">
+							<h3 class="font-heading font-bold text-white text-base" data-i18n="pN1"></h3>
+							<p class="text-slate-400 text-xs leading-relaxed" data-i18n="pD1"></p>
+						</div>
+					</div>
+					<div class="animate-item" style="animation-delay: 0.3s;">
+						<div class="chev chev-wide keep-white text-white font-heading font-bold text-sm sm:text-base"
+							style="background: #0ea5e9;">1950–60</div>
+						<div class="glass-card rounded-xl p-4 mt-3 space-y-1">
+							<h3 class="font-heading font-bold text-white text-base" data-i18n="pN2"></h3>
+							<p class="text-slate-400 text-xs leading-relaxed" data-i18n="pD2"></p>
+						</div>
+					</div>
+					<div class="animate-item" style="animation-delay: 0.4s;">
+						<div class="chev chev-wide keep-white text-white font-heading font-bold text-sm sm:text-base"
+							style="background: #6366f1;">1960–70</div>
+						<div class="glass-card rounded-xl p-4 mt-3 space-y-1">
+							<h3 class="font-heading font-bold text-white text-base" data-i18n="pN3"></h3>
+							<p class="text-slate-400 text-xs leading-relaxed" data-i18n="pD3"></p>
+						</div>
+					</div>
+					<div class="animate-item" style="animation-delay: 0.5s;">
+						<div class="chev chev-wide keep-white text-white font-heading font-bold text-sm sm:text-base"
+							style="background: #8b5cf6;">1970–90</div>
+						<div class="glass-card rounded-xl p-4 mt-3 space-y-1">
+							<h3 class="font-heading font-bold text-white text-base" data-i18n="pN4"></h3>
+							<p class="text-slate-400 text-xs leading-relaxed" data-i18n="pD4"></p>
+						</div>
+					</div>
+					<div class="animate-item" style="animation-delay: 0.6s;">
+						<div class="chev keep-white text-white font-heading font-bold text-sm sm:text-base"
+							style="background: #d946ef;"><span data-i18n="pY5"></span></div>
+						<div class="glass-card rounded-xl p-4 mt-3 space-y-1">
+							<h3 class="font-heading font-bold text-white text-base" data-i18n="pN5"></h3>
+							<p class="text-slate-400 text-xs leading-relaxed" data-i18n="pD5"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- SLIDE 4 -->
+		<section class="slide" id="slide-4">
+			<div class="w-full max-w-5xl mx-auto space-y-6">
+				<div class="animate-item text-center sm:text-left space-y-2" style="animation-delay: 0.1s;">
+					<span class="text-cyan-400 text-sm font-semibold tracking-wider uppercase" data-i18n="st4"></span>
+					<h2 class="font-heading text-3xl sm:text-4xl font-bold" data-i18n="s4t"></h2>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+					<div class="animate-item glass-card p-6 rounded-2xl space-y-3" style="animation-delay: 0.2s;">
+						<div
+							class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+							<i data-lucide="apple" class="w-5 h-5"></i>
+						</div>
+						<h3 class="font-heading font-bold text-lg text-white">Apple-II (1977)</h3>
+						<p class="text-slate-400 text-sm leading-relaxed" data-i18n="apDesc"></p>
+					</div>
+
+					<div class="animate-item glass-card p-6 rounded-2xl space-y-3" style="animation-delay: 0.3s;">
+						<div
+							class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+							<i data-lucide="monitor" class="w-5 h-5"></i>
+						</div>
+						<h3 class="font-heading font-bold text-lg text-white">IBM PC (1981)</h3>
+						<p class="text-slate-400 text-sm leading-relaxed" data-i18n="ibmDesc"></p>
+					</div>
+
+					<div class="animate-item glass-card p-6 rounded-2xl space-y-3" style="animation-delay: 0.4s;">
+						<div
+							class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+							<i data-lucide="layout" class="w-5 h-5"></i>
+						</div>
+						<h3 class="font-heading font-bold text-lg text-white">Microsoft Windows</h3>
+						<p class="text-slate-400 text-sm leading-relaxed" data-i18n="winDesc"></p>
+					</div>
+				</div>
+
+				<div
+					class="quote-card animate-item glass-card p-6 rounded-2xl text-center bg-gradient-to-r from-cyan-950/40 via-slate-900 to-indigo-950/40"
+					style="animation-delay: 0.5s;">
+					<p class="font-heading text-lg font-semibold text-cyan-200" data-i18n="gatesQ"></p>
+					<span class="text-xs text-slate-400 mt-1 block" data-i18n="gatesBy"></span>
+				</div>
+			</div>
+		</section>
+
+		<!-- SLIDE 5 -->
+		<section class="slide" id="slide-5">
+			<div class="w-full max-w-5xl mx-auto space-y-6">
+				<div class="animate-item text-center sm:text-left space-y-2" style="animation-delay: 0.1s;">
+					<span class="text-cyan-400 text-sm font-semibold tracking-wider uppercase" data-i18n="st5"></span>
+					<h2 class="font-heading text-3xl sm:text-4xl font-bold" data-i18n="s5t"></h2>
+				</div>
+
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+					<div class="animate-item glass-card p-5 rounded-xl space-y-3" style="animation-delay: 0.2s;">
+						<div class="text-cyan-400"><i data-lucide="server" class="w-7 h-7"></i></div>
+						<h3 class="font-heading font-bold text-white text-base" data-i18n="scName"></h3>
+						<p class="text-slate-400 text-xs leading-relaxed" data-i18n="scDesc"></p>
+					</div>
+
+					<div class="animate-item glass-card p-5 rounded-xl space-y-3" style="animation-delay: 0.3s;">
+						<div class="text-indigo-400"><i data-lucide="cloud" class="w-7 h-7"></i></div>
+						<h3 class="font-heading font-bold text-white text-base" data-i18n="clName"></h3>
+						<p class="text-slate-400 text-xs leading-relaxed" data-i18n="clDesc"></p>
+					</div>
+
+					<div class="animate-item glass-card p-5 rounded-xl space-y-3" style="animation-delay: 0.4s;">
+						<div class="text-purple-400"><i data-lucide="brain-circuit" class="w-7 h-7"></i></div>
+						<h3 class="font-heading font-bold text-white text-base" data-i18n="aiName"></h3>
+						<p class="text-slate-400 text-xs leading-relaxed" data-i18n="aiDesc"></p>
+					</div>
+
+					<div class="animate-item glass-card p-5 rounded-xl space-y-3" style="animation-delay: 0.5s;">
+						<div class="text-pink-400"><i data-lucide="atom" class="w-7 h-7"></i></div>
+						<h3 class="font-heading font-bold text-white text-base" data-i18n="qName"></h3>
+						<p class="text-slate-400 text-xs leading-relaxed" data-i18n="qDesc"></p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- SLIDE ARCHITECTURE -->
+		<section class="slide" id="slide-architecture">
+			<div class="scroll-inner custom-scroll w-full max-w-5xl mx-auto space-y-6">
+				<div class="animate-item text-center sm:text-left space-y-2" style="animation-delay: 0.1s;">
+					<span class="text-cyan-400 text-sm font-semibold tracking-wider uppercase" data-i18n="stD"></span>
+					<h2 class="font-heading text-3xl sm:text-4xl font-bold" data-i18n="aT"></h2>
+				</div>
+
+				<div class="animate-item space-y-3" style="animation-delay: 0.2s;">
+					<div class="flex flex-col md:flex-row items-center justify-center gap-3">
+						<div class="glass-card rounded-2xl p-5 text-center space-y-2 w-full md:w-52">
+							<div
+								class="mx-auto w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+								<i data-lucide="keyboard" class="w-6 h-6"></i></div>
+							<h3 class="font-heading font-bold text-white text-base" data-i18n="aIn"></h3>
+							<p class="text-slate-400 text-xs leading-relaxed" data-i18n="aInD"></p>
+						</div>
+						<div class="text-cyan-400 shrink-0"><i data-lucide="arrow-down" class="w-7 h-7 md:hidden"></i><i
+								data-lucide="arrow-right" class="w-7 h-7 hidden md:block"></i></div>
+						<div class="glass-card rounded-2xl p-5 text-center space-y-3 w-full md:w-72 border-2 border-cyan-500/50">
+							<div
+								class="mx-auto w-14 h-14 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+								<i data-lucide="cpu" class="w-7 h-7"></i></div>
+							<h3 class="font-heading font-bold text-white text-lg" data-i18n="aCpu"></h3>
+							<p class="text-slate-400 text-xs leading-relaxed" data-i18n="aCpuD"></p>
+							<div class="flex items-center justify-center gap-2 pt-1">
+								<span
+									class="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-slate-300">ALU</span>
+								<span class="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-300"
+									data-i18n="aCu"></span>
+							</div>
+						</div>
+						<div class="text-cyan-400 shrink-0"><i data-lucide="arrow-down" class="w-7 h-7 md:hidden"></i><i
+								data-lucide="arrow-right" class="w-7 h-7 hidden md:block"></i></div>
+						<div class="glass-card rounded-2xl p-5 text-center space-y-2 w-full md:w-52">
+							<div
+								class="mx-auto w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+								<i data-lucide="monitor" class="w-6 h-6"></i></div>
+							<h3 class="font-heading font-bold text-white text-base" data-i18n="aOut"></h3>
+							<p class="text-slate-400 text-xs leading-relaxed" data-i18n="aOutD"></p>
+						</div>
+					</div>
+
+					<div class="flex justify-center text-cyan-400"><i data-lucide="arrow-up-down" class="w-7 h-7"></i></div>
+
+					<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+						<div class="glass-card rounded-2xl p-5 text-center space-y-2 w-full md:w-52">
+							<div
+								class="mx-auto w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+								<i data-lucide="memory-stick" class="w-6 h-6"></i></div>
+							<h3 class="font-heading font-bold text-white text-base" data-i18n="aMem"></h3>
+							<p class="text-slate-400 text-xs leading-relaxed" data-i18n="aMemD"></p>
+						</div>
+						<div class="glass-card rounded-2xl p-5 text-center space-y-2 w-full md:w-52">
+							<div
+								class="mx-auto w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+								<i data-lucide="hard-drive" class="w-6 h-6"></i></div>
+							<h3 class="font-heading font-bold text-white text-base" data-i18n="aSto"></h3>
+							<p class="text-slate-400 text-xs leading-relaxed" data-i18n="aStoD"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- SLIDE 6 -->
+		<section class="slide" id="slide-6">
+			<div class="w-full max-w-4xl mx-auto space-y-8 text-center">
+				<div class="animate-item space-y-3" style="animation-delay: 0.1s;">
+					<span class="text-cyan-400 text-sm font-semibold tracking-wider uppercase" data-i18n="st6"></span>
+					<h2
+						class="title-grad font-heading text-3xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-100 to-slate-300"
+						data-i18n="s6t">
+					</h2>
+				</div>
+
+				<div class="animate-item glass-card p-8 rounded-3xl space-y-6 text-left" style="animation-delay: 0.2s;">
+					<p class="text-slate-300 text-base sm:text-lg leading-relaxed" data-i18n="s6p"></p>
+
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+						<div class="p-4 rounded-xl bg-white/5 border border-white/5 flex items-start gap-3">
+							<i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5"></i>
+							<span class="text-sm text-slate-300" data-i18n="c1"></span>
+						</div>
+						<div class="p-4 rounded-xl bg-white/5 border border-white/5 flex items-start gap-3">
+							<i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5"></i>
+							<span class="text-sm text-slate-300" data-i18n="c2"></span>
+						</div>
+						<div class="p-4 rounded-xl bg-white/5 border border-white/5 flex items-start gap-3">
+							<i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5"></i>
+							<span class="text-sm text-slate-300" data-i18n="c3"></span>
+						</div>
+						<div class="p-4 rounded-xl bg-white/5 border border-white/5 flex items-start gap-3">
+							<i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5"></i>
+							<span class="text-sm text-slate-300" data-i18n="c4"></span>
+						</div>
+					</div>
+				</div>
+
+				<div class="animate-item pt-4" style="animation-delay: 0.3s;">
+					<button id="restart-btn"
+						class="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium border border-white/10 transition inline-flex items-center gap-2">
+						<i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+						<span data-i18n="restart"></span>
+					</button>
+				</div>
+			</div>
+		</section>
+
+	</main>
+
+	<footer class="relative z-20 w-full glass-nav px-6 py-4 flex items-center justify-between">
+		<div class="flex items-center gap-2" id="dots-container">
+		</div>
+
+		<div class="font-mono text-sm text-slate-400 font-medium">
+			<span id="current-slide-num" class="text-white font-bold">1</span> / <span id="total-slides-num">7</span>
+		</div>
+
+		<div class="flex items-center gap-3">
+			<button id="prev-btn"
+				class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 text-white transition border border-white/10"
+				disabled>
+				<i data-lucide="chevron-left" class="w-5 h-5"></i>
+			</button>
+			<button id="next-btn"
+				class="keep-white p-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/20 transition">
+				<i data-lucide="chevron-right" class="w-5 h-5"></i>
+			</button>
+		</div>
+	</footer>
+
+	<script>
+		/* =====================================================
+			 TARJIMALAR  (UZ / EN / RU)
+			 ===================================================== */
+		const I18N = {
+			uz: {
+				docTitle: `Kompyuter Texnologiyalari Tarixi va Rivojlanishi`,
+				slideWord: `Slayd`,
+				fsTip: `To'liq ekranga o'tish`,
+				themeTip: `Kun / tun rejimi`,
+				brand: `Kompyuter Texnologiyalari`,
+				badge: `Taqdimot va Interaktiv Darslik`,
+				title: `Kompyuter Tarixi va Zamonaviy Zafarlari`,
+				subtitle: `Mexanik hisoblagichlardan boshlab sun'iy intellekt hamda kvant kompyuterlarigacha bo'lgan buyuk texnologik evolyutsiya.`,
+				start: `Taqdimotni Boshlash`,
+				kbdNav: `Navigatsiya`,
+				kbdNext: `Keyingi slayd`,
+
+				st1: `01-Bosqich`, st2: `02-Bosqich`, st3: `03-Bosqich`, st4: `04-Bosqich`, st5: `05-Bosqich`, st6: `06-Xulosa`,
+
+				s1t: `Ilk Qadamlar va Mexanik Hisoblash`,
+				abName: `Abakus (Cho'ptak)`,
+				abDesc: `Miloddan avvalgi III ming yillikda Qadimgi Bobil va Xitoyda yaratilgan eng birinchi mexanik hisoblash moslamasi.`,
+				abDate: `Miloddan avvalgi III ming yillik`,
+				bbName: `Charlz Bebbij`,
+				bbDesc: `1822-yilda "Analitik Mashina" loyihasini taqdim etgan. Bu zamonaviy kompyuterlarning birinchi mexanik prototipi hisoblanadi.`,
+				bbDate: `1822 - 1837 yillar`,
+				adName: `Ada Lavleys`,
+				adDesc: `Bebbij mashinasi uchun birinchi algoritmni yozgan va dunyodagi <b>birinchi dasturchi</b> ayol sifatida tarixga kirgan.`,
+				adDate: `1843-yil`,
+
+				s2t: `1-Avlod va ENIAC Giganti (1940-yillar)`,
+				vtName: `Lampali Elektron Kompyuterlar`,
+				vtDesc: `Birinchi avlod kompyuterlari <b>vakuumli elektron lampalarga</b> asoslangan edi. Ular ulkan hajmga ega bo'lib, juda ko'p elektr energiyasi sarflagan va tez qizib ketgan.`,
+				vt1: `Asosiy element: Elektron lampalar`,
+				vt2: `Dasturlash: Mashina kodida (0 va 1)`,
+				vt3: `Xotira: Perfokartalar va magnit barabanlar`,
+				enW: `30 tonna`, enWl: `Umumiy Og'irligi`,
+				enTl: `Elektron Lampalar`,
+				enA: `167 m²`, enAl: `Egallagan Maydoni`,
+				enOl: `Amal / Sekundiga`,
+
+				s3t: `Tranzistor va Mikrosxemalar Inqilobi`,
+				g2Name: `2-Avlod: Tranzistorlar`, g2Date: `1950 - 1960 yillar`,
+				g2Desc: `Tranzistorlarning kashf qilinishi lampalardan voz kechishga imkon berdi. Kompyuterlar 10 barobar kichraydi, ishonchliligi va tezligi esa keskin oshdi.`,
+				g3Name: `3-Avlod: Integral Sxemalar`, g3Date: `1960 - 1970 yillar`,
+				g3Desc: `Bitta silikon chip ustiga minglab tranzistorlar joylashtirildi. Bu Silicon Valley (Silikon Vodiysi) tezkor rivojlanishiga turtki bo'ldi.`,
+				mooreT: `Mur Qonuni (Moore's Law - 1965)`,
+				mooreQ: `"Mikrosxemalardagi tranzistorlar soni har 18-24 oyda ikki barobarga ortadi."`,
+				mooreTag: `Eksponentsial Rivojlanish`,
+				stD: `Diagramma`,
+				pT: `Kompyuter Avlodlari`,
+				pY5: `1990 – hozir`,
+				pN1: `Elektron lampalar`,
+				pD1: `ENIAC, UNIVAC — ulkan va tez qizib ketadigan mashinalar`,
+				pN2: `Tranzistorlar`,
+				pD2: `Kichikroq, tezroq va ishonchliroq`,
+				pN3: `Integral sxemalar`,
+				pD3: `Bitta chipda minglab tranzistor`,
+				pN4: `Mikroprotsessorlar`,
+				pD4: `Shaxsiy kompyuterlar davri boshlandi`,
+				pN5: `Sun'iy intellekt va bulut`,
+				pD5: `Superkompyuterlar, AI va kvant hisoblash`,
+				aT: `Kompyuter Qanday Ishlaydi?`,
+				aIn: `Kiritish`,
+				aInD: `Klaviatura, sichqoncha, mikrofon`,
+				aCpu: `Protsessor (CPU)`,
+				aCpuD: `Barcha hisob-kitoblarni bajaradi`,
+				aCu: `Boshqaruv bloki`,
+				aOut: `Chiqarish`,
+				aOutD: `Monitor, printer, karnay`,
+				aMem: `Operativ xotira (RAM)`,
+				aMemD: `Vaqtincha tezkor saqlash`,
+				aSto: `Doimiy xotira`,
+				aStoD: `SSD, HDD — fayllar va dasturlar`,
+				chT: `Tranzistorlar Soni: Mur Qonuni Amalda`,
+				chY: `Protsessordagi tranzistorlar soni (logarifmik shkala)`,
+				chNote: `Taxminiy qiymatlar: 1971-yildagi 2 300 tadan 2023-yilda 100 milliarddan ortiqqacha — 52 yilda taxminan 58 million marta o'sish, ya'ni taxminan har 2 yilda ikki barobar.`,
+
+				s4t: `Shaxsiy Kompyuterlar (PC) Inqilobi`,
+				apDesc: `Stiv Djobs va Stiv Voznyak tomonidan yaratilgan. Ommaviy bozor uchun birinchi muvaffaqiyatli rangli grafikali shaxsiy kompyuter.`,
+				ibmDesc: `Shaxsiy kompyuterlar standartini belgilab berdi. Ochiq arxitekturasi tufayli butun dunyo bo'ylab ommalashdi.`,
+				winDesc: `Grafik operatsion tizim (GUI) va sichqoncha orqali kompyuterdan foydalanishni har bir inson uchun sodda holatga keltirdi.`,
+				gatesQ: `"Har bir stolda va har bir xonadonda kompyuter bo'ladi."`,
+				gatesBy: `— Bill Geyts (1980-yillar)`,
+
+				s5t: `Internet va XXI Asr Yutuqlari`,
+				scName: `Superkompyuterlar`,
+				scDesc: `Sekundiga kvintillionlab (Exaflops) amallarni bajaruvchi Frontier va Fugaku kabi gigant tizimlar.`,
+				clName: `Bulutli Hisoblash`,
+				clDesc: `Ma'lumotlarni masofaviy serverlarda saqlash hamda global tarmoq orqali hisoblash quvvatidan foydalanish.`,
+				aiName: `Sun'iy Intellekt (AI)`,
+				aiDesc: `Mashinaviy o'rgatish, neyron tarmoqlari va chat-botlar orqali murakkab tahlillarni bajarish.`,
+				qName: `Kvant Kompyuterlar`,
+				qDesc: `Bit o'rniga Kubitlar (Qubits) yordamida an'anaviy kompyuterlardan millionlab marta tezroq hisoblash.`,
+
+				s6t: `Kompyuterlarning Kelajakka Ta'siri`,
+				s6p: `Kompyuterlar oddiy hisob-kitob vositasidan insoniyat tamaddunining eng muhim dvigateliga aylandi. Bugun ular tibbiyot, koinot tadqiqotlari, ta'lim hamda sanoatning har bir tarmog'ini boshqaradi.`,
+				c1: `Tibbiyotda saraton va DNK tahlillarini sekundlarda bajarish`,
+				c2: `Koinot kemalari va Mars stansiyalarini avtonom boshqarish`,
+				c3: `Ekologiya va iqlim o'zgarishini aniq modellashtirish`,
+				c4: `Inson imkoniyatlarini oshiruvchi AI yordamchilari`,
+				restart: `Boshidan Ko'rish`
+			},
+
+			en: {
+				docTitle: `History and Development of Computer Technology`,
+				slideWord: `Slide`,
+				fsTip: `Toggle fullscreen`,
+				themeTip: `Light / dark mode`,
+				brand: `Computer Technologies`,
+				badge: `Presentation and Interactive Lesson`,
+				title: `The History of Computers and Modern Triumphs`,
+				subtitle: `The great technological evolution from mechanical calculators to artificial intelligence and quantum computers.`,
+				start: `Start Presentation`,
+				kbdNav: `Navigation`,
+				kbdNext: `Next slide`,
+
+				st1: `Stage 01`, st2: `Stage 02`, st3: `Stage 03`, st4: `Stage 04`, st5: `Stage 05`, st6: `06 – Conclusion`,
+
+				s1t: `First Steps and Mechanical Computing`,
+				abName: `Abacus`,
+				abDesc: `The earliest mechanical counting device, created in ancient Babylon and China around the 3rd millennium BC.`,
+				abDate: `3rd millennium BC`,
+				bbName: `Charles Babbage`,
+				bbDesc: `In 1822 he presented his "Analytical Engine" project. It is considered the first mechanical prototype of modern computers.`,
+				bbDate: `1822 – 1837`,
+				adName: `Ada Lovelace`,
+				adDesc: `Wrote the first algorithm for Babbage's machine and went down in history as the world's <b>first programmer</b>.`,
+				adDate: `1843`,
+
+				s2t: `First Generation and the ENIAC Giant (1940s)`,
+				vtName: `Vacuum Tube Computers`,
+				vtDesc: `First-generation computers were built on <b>vacuum tubes</b>. They were enormous, consumed huge amounts of electricity and overheated quickly.`,
+				vt1: `Main component: Vacuum tubes`,
+				vt2: `Programming: Machine code (0s and 1s)`,
+				vt3: `Memory: Punched cards and magnetic drums`,
+				enW: `30 tons`, enWl: `Total weight`,
+				enTl: `Vacuum tubes`,
+				enA: `167 m²`, enAl: `Floor area`,
+				enOl: `Operations / second`,
+
+				s3t: `The Transistor and Microchip Revolution`,
+				g2Name: `2nd Generation: Transistors`, g2Date: `1950s – 1960s`,
+				g2Desc: `The invention of the transistor made it possible to abandon vacuum tubes. Computers became about 10 times smaller, while reliability and speed rose sharply.`,
+				g3Name: `3rd Generation: Integrated Circuits`, g3Date: `1960s – 1970s`,
+				g3Desc: `Thousands of transistors were placed on a single silicon chip. This fueled the rapid growth of Silicon Valley.`,
+				mooreT: `Moore's Law (1965)`,
+				mooreQ: `"The number of transistors on a chip doubles every 18–24 months."`,
+				mooreTag: `Exponential Growth`,
+				stD: `Diagram`,
+				pT: `Generations of Computers`,
+				pY5: `1990 – today`,
+				pN1: `Vacuum tubes`,
+				pD1: `ENIAC, UNIVAC — huge machines that overheated easily`,
+				pN2: `Transistors`,
+				pD2: `Smaller, faster and more reliable`,
+				pN3: `Integrated circuits`,
+				pD3: `Thousands of transistors on one chip`,
+				pN4: `Microprocessors`,
+				pD4: `The personal computer era begins`,
+				pN5: `AI and the cloud`,
+				pD5: `Supercomputers, AI and quantum computing`,
+				aT: `How Does a Computer Work?`,
+				aIn: `Input`,
+				aInD: `Keyboard, mouse, microphone`,
+				aCpu: `Processor (CPU)`,
+				aCpuD: `Performs all calculations`,
+				aCu: `Control unit`,
+				aOut: `Output`,
+				aOutD: `Monitor, printer, speakers`,
+				aMem: `Memory (RAM)`,
+				aMemD: `Fast temporary storage`,
+				aSto: `Storage`,
+				aStoD: `SSD, HDD — files and programs`,
+				chT: `Transistor Count: Moore's Law in Action`,
+				chY: `Transistors per processor (logarithmic scale)`,
+				chNote: `Approximate figures: from 2,300 in 1971 to over 100 billion in 2023 — roughly a 58-millionfold increase in 52 years, or a doubling about every two years.`,
+
+				s4t: `The Personal Computer (PC) Revolution`,
+				apDesc: `Created by Steve Jobs and Steve Wozniak. The first successful color-graphics personal computer for the mass market.`,
+				ibmDesc: `Set the standard for personal computers. Its open architecture helped it spread across the world.`,
+				winDesc: `A graphical operating system (GUI) and the mouse made using a computer simple for everyone.`,
+				gatesQ: `"There will be a computer on every desk and in every home."`,
+				gatesBy: `— Bill Gates (1980s)`,
+
+				s5t: `The Internet and 21st-Century Achievements`,
+				scName: `Supercomputers`,
+				scDesc: `Giant systems like Frontier and Fugaku performing quintillions of operations per second (exaflops).`,
+				clName: `Cloud Computing`,
+				clDesc: `Storing data on remote servers and using computing power over the global network.`,
+				aiName: `Artificial Intelligence (AI)`,
+				aiDesc: `Performing complex analysis through machine learning, neural networks and chatbots.`,
+				qName: `Quantum Computers`,
+				qDesc: `Using qubits instead of bits to compute millions of times faster than conventional computers.`,
+
+				s6t: `The Impact of Computers on the Future`,
+				s6p: `Computers have grown from a simple calculating tool into the most important engine of human civilization. Today they drive medicine, space exploration, education and every branch of industry.`,
+				c1: `Running cancer and DNA analysis in medicine within seconds`,
+				c2: `Autonomous control of spacecraft and Mars stations`,
+				c3: `Accurate modeling of ecology and climate change`,
+				c4: `AI assistants that expand human capabilities`,
+				restart: `Watch Again`
+			},
+
+			ru: {
+				docTitle: `История и развитие компьютерных технологий`,
+				slideWord: `Слайд`,
+				fsTip: `Полноэкранный режим`,
+				themeTip: `Светлая / тёмная тема`,
+				brand: `Компьютерные технологии`,
+				badge: `Презентация и интерактивный урок`,
+				title: `История компьютеров и современные достижения`,
+				subtitle: `Великая технологическая эволюция от механических счётных устройств до искусственного интеллекта и квантовых компьютеров.`,
+				start: `Начать презентацию`,
+				kbdNav: `Навигация`,
+				kbdNext: `Следующий слайд`,
+
+				st1: `Этап 01`, st2: `Этап 02`, st3: `Этап 03`, st4: `Этап 04`, st5: `Этап 05`, st6: `06 – Заключение`,
+
+				s1t: `Первые шаги и механические вычисления`,
+				abName: `Абак (счёты)`,
+				abDesc: `Первое механическое счётное устройство, созданное в Древнем Вавилоне и Китае в III тысячелетии до н. э.`,
+				abDate: `III тысячелетие до н. э.`,
+				bbName: `Чарльз Бэббидж`,
+				bbDesc: `В 1822 году представил проект «Аналитической машины». Она считается первым механическим прототипом современных компьютеров.`,
+				bbDate: `1822 – 1837 годы`,
+				adName: `Ада Лавлейс`,
+				adDesc: `Написала первый алгоритм для машины Бэббиджа и вошла в историю как <b>первый в мире программист</b>.`,
+				adDate: `1843 год`,
+
+				s2t: `Первое поколение и гигант ENIAC (1940-е)`,
+				vtName: `Ламповые электронные компьютеры`,
+				vtDesc: `Компьютеры первого поколения были построены на <b>электронных лампах</b>. Они были огромными, потребляли много электроэнергии и быстро перегревались.`,
+				vt1: `Основной элемент: электронные лампы`,
+				vt2: `Программирование: машинный код (0 и 1)`,
+				vt3: `Память: перфокарты и магнитные барабаны`,
+				enW: `30 тонн`, enWl: `Общий вес`,
+				enTl: `Электронных ламп`,
+				enA: `167 м²`, enAl: `Занимаемая площадь`,
+				enOl: `Операций в секунду`,
+
+				s3t: `Революция транзисторов и микросхем`,
+				g2Name: `2-е поколение: транзисторы`, g2Date: `1950–1960-е годы`,
+				g2Desc: `Изобретение транзистора позволило отказаться от ламп. Компьютеры уменьшились примерно в 10 раз, а надёжность и скорость резко выросли.`,
+				g3Name: `3-е поколение: интегральные схемы`, g3Date: `1960–1970-е годы`,
+				g3Desc: `Тысячи транзисторов разместили на одном кремниевом кристалле. Это дало толчок стремительному развитию Кремниевой долины.`,
+				mooreT: `Закон Мура (1965)`,
+				mooreQ: `«Количество транзисторов на микросхеме удваивается каждые 18–24 месяца».`,
+				mooreTag: `Экспоненциальный рост`,
+				stD: `Диаграмма`,
+				pT: `Поколения компьютеров`,
+				pY5: `1990 – наст. время`,
+				pN1: `Электронные лампы`,
+				pD1: `ENIAC, UNIVAC — огромные, быстро перегревающиеся машины`,
+				pN2: `Транзисторы`,
+				pD2: `Меньше, быстрее и надёжнее`,
+				pN3: `Интегральные схемы`,
+				pD3: `Тысячи транзисторов на одном кристалле`,
+				pN4: `Микропроцессоры`,
+				pD4: `Начало эры персональных компьютеров`,
+				pN5: `ИИ и облака`,
+				pD5: `Суперкомпьютеры, ИИ и квантовые вычисления`,
+				aT: `Как работает компьютер?`,
+				aIn: `Ввод`,
+				aInD: `Клавиатура, мышь, микрофон`,
+				aCpu: `Процессор (CPU)`,
+				aCpuD: `Выполняет все вычисления`,
+				aCu: `Устройство управления`,
+				aOut: `Вывод`,
+				aOutD: `Монитор, принтер, колонки`,
+				aMem: `Оперативная память (RAM)`,
+				aMemD: `Быстрое временное хранение`,
+				aSto: `Накопитель`,
+				aStoD: `SSD, HDD — файлы и программы`,
+				chT: `Число транзисторов: закон Мура на практике`,
+				chY: `Транзисторов в процессоре (логарифмическая шкала)`,
+				chNote: `Приблизительные данные: от 2 300 в 1971 году до более 100 миллиардов в 2023 — рост примерно в 58 миллионов раз за 52 года, то есть удвоение примерно каждые два года.`,
+
+				s4t: `Революция персональных компьютеров (ПК)`,
+				apDesc: `Создан Стивом Джобсом и Стивом Возняком. Первый успешный персональный компьютер с цветной графикой для массового рынка.`,
+				ibmDesc: `Задал стандарт персональных компьютеров. Благодаря открытой архитектуре получил распространение по всему миру.`,
+				winDesc: `Графическая операционная система (GUI) и мышь сделали работу с компьютером простой для каждого.`,
+				gatesQ: `«Компьютер будет на каждом столе и в каждом доме».`,
+				gatesBy: `— Билл Гейтс (1980-е)`,
+
+				s5t: `Интернет и достижения XXI века`,
+				scName: `Суперкомпьютеры`,
+				scDesc: `Гигантские системы вроде Frontier и Fugaku, выполняющие квинтильоны операций в секунду (экзафлопсы).`,
+				clName: `Облачные вычисления`,
+				clDesc: `Хранение данных на удалённых серверах и использование вычислительной мощности через глобальную сеть.`,
+				aiName: `Искусственный интеллект (ИИ)`,
+				aiDesc: `Выполнение сложного анализа с помощью машинного обучения, нейронных сетей и чат-ботов.`,
+				qName: `Квантовые компьютеры`,
+				qDesc: `Вычисления с помощью кубитов вместо битов в миллионы раз быстрее, чем на традиционных компьютерах.`,
+
+				s6t: `Влияние компьютеров на будущее`,
+				s6p: `Компьютеры превратились из простого инструмента вычислений в важнейший двигатель человеческой цивилизации. Сегодня они управляют медициной, исследованием космоса, образованием и каждой отраслью промышленности.`,
+				c1: `Анализ рака и ДНК в медицине за считаные секунды`,
+				c2: `Автономное управление космическими аппаратами и станциями на Марсе`,
+				c3: `Точное моделирование экологии и изменения климата`,
+				c4: `ИИ-помощники, расширяющие возможности человека`,
+				restart: `Смотреть сначала`
+			},
+
+			tr: {
+				docTitle: `Bilgisayar Teknolojilerinin Tarihi ve Gelişimi`,
+				slideWord: `Slayt`,
+				fsTip: `Tam ekran`,
+				themeTip: `Açık / koyu mod`,
+				brand: `Bilgisayar Teknolojileri`,
+				badge: `Sunum ve Etkileşimli Ders`,
+				title: `Bilgisayar Tarihi ve Modern Başarılar`,
+				subtitle: `Mekanik hesaplayıcılardan yapay zekâya ve kuantum bilgisayarlara uzanan büyük teknolojik evrim.`,
+				start: `Sunuma Başla`,
+				kbdNav: `Gezinme`,
+				kbdNext: `Sonraki slayt`,
+
+				st1: `Aşama 01`, st2: `Aşama 02`, st3: `Aşama 03`, st4: `Aşama 04`, st5: `Aşama 05`, st6: `06 – Sonuç`,
+
+				s1t: `İlk Adımlar ve Mekanik Hesaplama`,
+				abName: `Abaküs`,
+				abDesc: `MÖ 3. binyılda Eski Babil ve Çin'de yaratılan ilk mekanik hesaplama aracı.`,
+				abDate: `MÖ 3. binyıl`,
+				bbName: `Charles Babbage`,
+				bbDesc: `1822'de "Analitik Makine" projesini sundu. Modern bilgisayarların ilk mekanik prototipi kabul edilir.`,
+				bbDate: `1822 – 1837`,
+				adName: `Ada Lovelace`,
+				adDesc: `Babbage'ın makinesi için ilk algoritmayı yazdı ve dünyanın <b>ilk programcısı</b> olarak tarihe geçti.`,
+				adDate: `1843`,
+
+				s2t: `1. Nesil ve ENIAC Devi (1940'lar)`,
+				vtName: `Lambalı Elektronik Bilgisayarlar`,
+				vtDesc: `Birinci nesil bilgisayarlar <b>vakumlu elektron lambalarına</b> dayanıyordu. Çok büyüktüler, çok fazla elektrik harcıyor ve hızla ısınıyorlardı.`,
+				vt1: `Ana bileşen: Elektron lambaları`,
+				vt2: `Programlama: Makine kodu (0 ve 1)`,
+				vt3: `Bellek: Delikli kartlar ve manyetik tamburlar`,
+				enW: `30 ton`, enWl: `Toplam ağırlık`,
+				enTl: `Elektron lambası`,
+				enA: `167 m²`, enAl: `Kapladığı alan`,
+				enOl: `İşlem / saniye`,
+
+				s3t: `Transistör ve Mikroçip Devrimi`,
+				g2Name: `2. Nesil: Transistörler`, g2Date: `1950'ler – 1960'lar`,
+				g2Desc: `Transistörün icadı lambalardan vazgeçmeyi mümkün kıldı. Bilgisayarlar yaklaşık 10 kat küçüldü; güvenilirlik ve hız ise keskin biçimde arttı.`,
+				g3Name: `3. Nesil: Entegre Devreler`, g3Date: `1960'lar – 1970'ler`,
+				g3Desc: `Tek bir silikon çip üzerine binlerce transistör yerleştirildi. Bu, Silikon Vadisi'nin hızla gelişmesini sağladı.`,
+				mooreT: `Moore Yasası (1965)`,
+				mooreQ: `"Mikroçiplerdeki transistör sayısı her 18-24 ayda bir iki katına çıkar."`,
+				mooreTag: `Üstel Büyüme`,
+
+				stD: `Diyagram`,
+				pT: `Bilgisayar Nesilleri`,
+				pY5: `1990 – günümüz`,
+				pN1: `Elektron lambaları`,
+				pD1: `ENIAC, UNIVAC — devasa ve çabuk ısınan makineler`,
+				pN2: `Transistörler`,
+				pD2: `Daha küçük, daha hızlı ve daha güvenilir`,
+				pN3: `Entegre devreler`,
+				pD3: `Tek çipte binlerce transistör`,
+				pN4: `Mikroişlemciler`,
+				pD4: `Kişisel bilgisayar çağı başlıyor`,
+				pN5: `Yapay zekâ ve bulut`,
+				pD5: `Süper bilgisayarlar, yapay zekâ ve kuantum hesaplama`,
+				aT: `Bilgisayar Nasıl Çalışır?`,
+				aIn: `Giriş`,
+				aInD: `Klavye, fare, mikrofon`,
+				aCpu: `İşlemci (CPU)`,
+				aCpuD: `Tüm hesaplamaları yapar`,
+				aCu: `Kontrol birimi`,
+				aOut: `Çıkış`,
+				aOutD: `Monitör, yazıcı, hoparlör`,
+				aMem: `Bellek (RAM)`,
+				aMemD: `Hızlı geçici depolama`,
+				aSto: `Depolama`,
+				aStoD: `SSD, HDD — dosyalar ve programlar`,
+				chT: `Transistör Sayısı: Moore Yasası Uygulamada`,
+				chY: `İşlemcideki transistör sayısı (logaritmik ölçek)`,
+				chNote: `Yaklaşık değerler: 1971'de 2.300'den 2023'te 100 milyarın üzerine — 52 yılda yaklaşık 58 milyon kat artış, yani yaklaşık iki yılda bir iki katına çıkma.`,
+
+				s4t: `Kişisel Bilgisayar (PC) Devrimi`,
+				apDesc: `Steve Jobs ve Steve Wozniak tarafından yaratıldı. Kitle pazarı için ilk başarılı renkli grafikli kişisel bilgisayar.`,
+				ibmDesc: `Kişisel bilgisayarların standardını belirledi. Açık mimarisi sayesinde tüm dünyaya yayıldı.`,
+				winDesc: `Grafik işletim sistemi (GUI) ve fare, bilgisayar kullanımını herkes için kolaylaştırdı.`,
+				gatesQ: `"Her masada ve her evde bir bilgisayar olacak."`,
+				gatesBy: `— Bill Gates (1980'ler)`,
+
+				s5t: `İnternet ve 21. Yüzyılın Başarıları`,
+				scName: `Süper Bilgisayarlar`,
+				scDesc: `Saniyede kentilyonlarca (exaflops) işlem yapan Frontier ve Fugaku gibi dev sistemler.`,
+				clName: `Bulut Bilişim`,
+				clDesc: `Verileri uzak sunucularda saklamak ve küresel ağ üzerinden hesaplama gücünden yararlanmak.`,
+				aiName: `Yapay Zekâ (AI)`,
+				aiDesc: `Makine öğrenmesi, sinir ağları ve sohbet botları aracılığıyla karmaşık analizler yapmak.`,
+				qName: `Kuantum Bilgisayarlar`,
+				qDesc: `Bit yerine kübitler (qubit) kullanarak geleneksel bilgisayarlardan milyonlarca kat hızlı hesaplama.`,
+
+				s6t: `Bilgisayarların Geleceğe Etkisi`,
+				s6p: `Bilgisayarlar basit bir hesaplama aracından insanlık medeniyetinin en önemli motoruna dönüştü. Bugün tıbbı, uzay araştırmalarını, eğitimi ve sanayinin her dalını yönlendiriyorlar.`,
+				c1: `Tıpta kanser ve DNA analizlerini saniyeler içinde yapmak`,
+				c2: `Uzay araçlarını ve Mars istasyonlarını otonom yönetmek`,
+				c3: `Ekolojiyi ve iklim değişikliğini doğru modellemek`,
+				c4: `İnsan yeteneklerini artıran yapay zekâ asistanları`,
+				restart: `Baştan İzle`
+			}
+		}
+
+		/* =====================================================
+			 ASOSIY DASTUR
+			 ===================================================== */
+		document.addEventListener('DOMContentLoaded', () => {
+			lucide.createIcons()
+
+			const slides = document.querySelectorAll('.slide')
+			const totalSlides = slides.length
+			let currentSlide = 0
+
+			const prevBtn = document.getElementById('prev-btn')
+			const nextBtn = document.getElementById('next-btn')
+			const startBtn = document.getElementById('start-btn')
+			const restartBtn = document.getElementById('restart-btn')
+			const fullscreenBtn = document.getElementById('fullscreen-btn')
+			const themeBtn = document.getElementById('theme-btn')
+			const langButtons = document.querySelectorAll('.lang-btn')
+			const currentSlideNum = document.getElementById('current-slide-num')
+			const totalSlidesNum = document.getElementById('total-slides-num')
+			const progressBar = document.getElementById('progress-bar')
+			const dotsContainer = document.getElementById('dots-container')
+
+			totalSlidesNum.textContent = totalSlides
+
+			/* ---------- Saqlangan sozlamalar ---------- */
+			function load(key, fallback) {
+				try { return localStorage.getItem(key) || fallback } catch (e) { return fallback }
+			}
+			function save(key, value) {
+				try { localStorage.setItem(key, value) } catch (e) { }
+			}
+
+			let currentLang = load('lang', 'uz')
+			if (!I18N[currentLang]) currentLang = 'uz'
+
+			/* ---------- Kun / tun rejimi ---------- */
+			function applyTheme(theme) {
+				document.documentElement.classList.toggle('dark', theme === 'dark')
+				save('theme', theme)
+			}
+
+			themeBtn.addEventListener('click', () => {
+				const isDark = document.documentElement.classList.contains('dark')
+				applyTheme(isDark ? 'light' : 'dark')
+			})
+
+			applyTheme(load('theme', 'dark'))
+
+			/* ---------- Til almashtirish ---------- */
+			function applyLang(lang) {
+				currentLang = lang
+				const dict = I18N[lang]
+				document.documentElement.lang = lang
+				document.title = dict.docTitle
+				save('lang', lang)
+
+				document.querySelectorAll('[data-i18n]').forEach(el => {
+					const key = el.getAttribute('data-i18n')
+					if (dict[key] !== undefined) el.innerHTML = dict[key]
+				})
+				document.querySelectorAll('[data-i18n-title]').forEach(el => {
+					const key = el.getAttribute('data-i18n-title')
+					if (dict[key] !== undefined) el.setAttribute('title', dict[key])
+				})
+
+				langButtons.forEach(btn => {
+					btn.classList.toggle('active', btn.dataset.lang === lang)
+				})
+
+				document.querySelectorAll('#dots-container .dot').forEach((dot, idx) => {
+					dot.setAttribute('title', `${dict.slideWord} ${idx + 1}`)
+				})
+			}
+
+			langButtons.forEach(btn => {
+				btn.addEventListener('click', () => applyLang(btn.dataset.lang))
+			})
+
+			/* ---------- Nuqtalar (dots) ---------- */
+			slides.forEach((_, idx) => {
+				const dot = document.createElement('button')
+				dot.className = 'dot' + (idx === 0 ? ' dot-on' : '')
+				dot.addEventListener('click', () => goToSlide(idx))
+				dotsContainer.appendChild(dot)
+			})
+
+			const dots = dotsContainer.querySelectorAll('.dot')
+
+			function updateSlide() {
+				slides.forEach((slide, idx) => {
+					slide.classList.toggle('active', idx === currentSlide)
+				})
+
+				currentSlideNum.textContent = currentSlide + 1
+				prevBtn.disabled = currentSlide === 0
+				nextBtn.disabled = false
+
+				const progressPercentage = (currentSlide / (totalSlides - 1)) * 100
+				progressBar.style.width = `${progressPercentage}%`
+
+				dots.forEach((dot, idx) => {
+					dot.classList.toggle('dot-on', idx === currentSlide)
+				})
+
+				lucide.createIcons()
+			}
+
+			function goToSlide(index) {
+				if (index >= 0 && index < totalSlides) {
+					currentSlide = index
+					updateSlide()
+				}
+			}
+
+			function nextSlide() {
+				if (currentSlide < totalSlides - 1) {
+					currentSlide++
+					updateSlide()
+				}
+			}
+
+			function prevSlide() {
+				if (currentSlide > 0) {
+					currentSlide--
+					updateSlide()
+				}
+			}
+
+			nextBtn.addEventListener('click', nextSlide)
+			prevBtn.addEventListener('click', prevSlide)
+			startBtn.addEventListener('click', () => goToSlide(1))
+			restartBtn.addEventListener('click', () => goToSlide(0))
+
+			document.addEventListener('keydown', (e) => {
+				if (e.key === 'ArrowRight' || e.key === ' ' || e.code === 'Space') {
+					e.preventDefault()
+					nextSlide()
+				} else if (e.key === 'ArrowLeft') {
+					prevSlide()
+				}
+			})
+
+			fullscreenBtn.addEventListener('click', () => {
+				if (!document.fullscreenElement) {
+					document.documentElement.requestFullscreen().catch(err => {
+						console.error(`Fullscreen xatosi: ${err.message}`)
+					})
+				} else {
+					if (document.exitFullscreen) {
+						document.exitFullscreen()
+					}
+				}
+			})
+
+			applyLang(currentLang)
+			updateSlide()
+		});
+	</script>
+</body>
+
+</html>

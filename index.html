@@ -282,6 +282,30 @@
 			overflow-y: auto;
 		}
 
+		/* ---------- Music player ---------- */
+		#music-btn:not(.is-playing) .ic-pause {
+			display: none;
+		}
+
+		#music-btn.is-playing .ic-play {
+			display: none;
+		}
+
+		#music-btn.is-playing {
+			color: #22d3ee;
+			border-color: rgba(34, 211, 238, 0.5);
+		}
+
+		#music-btn.is-playing .ic-note {
+			animation: notePulse 1.2s ease-in-out infinite;
+		}
+
+		@keyframes notePulse {
+			50% {
+				transform: scale(1.2);
+			}
+		}
+
 		/* ---------- Theme toggle icons ---------- */
 		html.dark .theme-moon {
 			display: none;
@@ -447,6 +471,24 @@
 				<button class="lang-btn" data-lang="en" title="English">EN</button>
 				<button class="lang-btn" data-lang="ru" title="Русский">RU</button>
 				<button class="lang-btn" data-lang="tr" title="Türkçe">TR</button>
+			</div>
+
+			<!-- Qo'shiq (musiqa pleyeri) -->
+			<audio id="bg-audio" src="dilmurod-sultonov-mejina_(uzhits.net).mp3" loop preload="none"></audio>
+			<input type="file" id="music-file" accept="audio/*" class="hidden">
+			<div class="flex items-center gap-1">
+				<button id="music-btn"
+					class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition border border-white/10 flex items-center gap-1.5"
+					data-i18n-title="musicTip">
+					<i data-lucide="music" class="w-4 h-4 ic-note"></i>
+					<span class="ic-play"><i data-lucide="play" class="w-4 h-4"></i></span>
+					<span class="ic-pause"><i data-lucide="pause" class="w-4 h-4"></i></span>
+				</button>
+				<button id="music-pick"
+					class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition border border-white/10"
+					data-i18n-title="musicPick">
+					<i data-lucide="folder-open" class="w-4 h-4"></i>
+				</button>
 			</div>
 
 			<!-- Kun / Tun rejimi -->
@@ -1055,6 +1097,8 @@
 				slideWord: `Slayd`,
 				fsTip: `To'liq ekranga o'tish`,
 				themeTip: `Kun / tun rejimi`,
+				musicTip: `Qo'shiqni yoqish / o'chirish`,
+				musicPick: `Qo'shiq faylini tanlash`,
 				brand: `Kompyuter Texnologiyalari`,
 				badge: `Taqdimot va Interaktiv Darslik`,
 				title: `Kompyuter Tarixi va Zamonaviy Zafarlari`,
@@ -1155,6 +1199,8 @@
 				slideWord: `Slide`,
 				fsTip: `Toggle fullscreen`,
 				themeTip: `Light / dark mode`,
+				musicTip: `Play / pause music`,
+				musicPick: `Choose a music file`,
 				brand: `Computer Technologies`,
 				badge: `Presentation and Interactive Lesson`,
 				title: `The History of Computers and Modern Triumphs`,
@@ -1255,6 +1301,8 @@
 				slideWord: `Слайд`,
 				fsTip: `Полноэкранный режим`,
 				themeTip: `Светлая / тёмная тема`,
+				musicTip: `Включить / выключить музыку`,
+				musicPick: `Выбрать музыкальный файл`,
 				brand: `Компьютерные технологии`,
 				badge: `Презентация и интерактивный урок`,
 				title: `История компьютеров и современные достижения`,
@@ -1355,6 +1403,8 @@
 				slideWord: `Slayt`,
 				fsTip: `Tam ekran`,
 				themeTip: `Açık / koyu mod`,
+				musicTip: `Müziği aç / kapat`,
+				musicPick: `Müzik dosyası seç`,
 				brand: `Bilgisayar Teknolojileri`,
 				badge: `Sunum ve Etkileşimli Ders`,
 				title: `Bilgisayar Tarihi ve Modern Başarılar`,
@@ -1486,6 +1536,30 @@
 
 			let currentLang = load('lang', 'uz')
 			if (!I18N[currentLang]) currentLang = 'uz'
+
+			/* ---------- Qo'shiq pleyeri ---------- */
+			const audio = document.getElementById('bg-audio')
+			const musicBtn = document.getElementById('music-btn')
+			const musicPick = document.getElementById('music-pick')
+			const musicFile = document.getElementById('music-file')
+			audio.volume = 0.6
+
+			audio.addEventListener('play', () => musicBtn.classList.add('is-playing'))
+			audio.addEventListener('pause', () => musicBtn.classList.remove('is-playing'))
+
+			musicBtn.addEventListener('click', () => {
+				musicBtn.blur()
+				if (!audio.paused) { audio.pause(); return }
+				// qoshiq.mp3 topilmasa — fayl tanlash oynasi ochiladi
+				audio.play().catch(() => musicFile.click())
+			})
+			musicPick.addEventListener('click', () => { musicPick.blur(); musicFile.click() })
+			musicFile.addEventListener('change', () => {
+				const f = musicFile.files[0]
+				if (!f) return
+				audio.src = URL.createObjectURL(f)
+				audio.play().catch(() => { })
+			})
 
 			/* ---------- Kun / tun rejimi ---------- */
 			function applyTheme(theme) {
